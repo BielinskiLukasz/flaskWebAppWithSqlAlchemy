@@ -17,7 +17,8 @@ class Artist(Base):
 class Employee(Base):
     __tablename__ = 'employee'
 
-    employee_id = Column(Integer, primary_key=True, server_default=text("nextval('employee_employee_id_seq'::regclass)"))
+    employee_id = Column(Integer, primary_key=True,
+                         server_default=text("nextval('employee_employee_id_seq'::regclass)"))
     last_name = Column(String(20), nullable=False)
     first_name = Column(String(20), nullable=False)
     title = Column(String(30))
@@ -46,14 +47,16 @@ class Genre(Base):
 class MediaType(Base):
     __tablename__ = 'media_type'
 
-    media_type_id = Column(Integer, primary_key=True, server_default=text("nextval('mediatype_mediatype_id_seq'::regclass)"))
+    media_type_id = Column(Integer, primary_key=True,
+                           server_default=text("nextval('mediatype_mediatype_id_seq'::regclass)"))
     name = Column(String(120))
 
 
 class Playlist(Base):
     __tablename__ = 'playlist'
 
-    playlist_id = Column(Integer, primary_key=True, server_default=text("nextval('playlist_playlist_id_seq'::regclass)"))
+    playlist_id = Column(Integer, primary_key=True,
+                         server_default=text("nextval('playlist_playlist_id_seq'::regclass)"))
     name = Column(String(120))
 
     tracks = relationship('Track', secondary='playlist_track')
@@ -72,7 +75,8 @@ class Album(Base):
 class Customer(Base):
     __tablename__ = 'customer'
 
-    customer_id = Column(Integer, primary_key=True, server_default=text("nextval('customer_customer_id_seq'::regclass)"))
+    customer_id = Column(Integer, primary_key=True,
+                         server_default=text("nextval('customer_customer_id_seq'::regclass)"))
     first_name = Column(String(40), nullable=False)
     last_name = Column(String(20), nullable=False)
     company = Column(String(80))
@@ -126,7 +130,8 @@ class Track(Base):
 class InvoiceLine(Base):
     __tablename__ = 'invoice_line'
 
-    invoice_line_id = Column(Integer, primary_key=True, server_default=text("nextval('invoiceline_invoiceline_id_seq'::regclass)"))
+    invoice_line_id = Column(Integer, primary_key=True, server_default=text("nextval('invoiceline_invoiceline_id_seq"
+                                                                            "'::regclass)"))
     invoice_id = Column(ForeignKey('invoice.invoice_id'), nullable=False, index=True)
     track_id = Column(ForeignKey('track.track_id'), nullable=False, index=True)
     unit_price = Column(Numeric(10, 2), nullable=False)
