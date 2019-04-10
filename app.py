@@ -182,7 +182,12 @@ def artists():
 
     new_artist = request.get_json()
     schema = Schema({'name': And(str, len)})
-    if not schema.is_valid(new_artist):
+    not_valid = True
+    try:
+        not_valid = schema.is_valid(new_artist)
+    except:
+        abort(400)
+    if not not_valid:
         return 400
 
     try:
