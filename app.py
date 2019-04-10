@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 
 class InvalidUsage(Exception):
-    status_code = 404
+    status_code = 400
 
     def __init__(self, error, status_code=None, payload=None):
         super().__init__(self)
@@ -44,7 +44,7 @@ def handle_invalid_usage(error):
 
 
 @app.teardown_appcontext
-def shutdown_session():
+def shutdown_session(exception=None):
     db_session.remove()
 
 
@@ -88,7 +88,7 @@ def count_songs():
         art = art.split(",")
 
     else:
-        abort(404)
+        abort(400)
     try:
         result_dict = {}
         songs = (
@@ -99,14 +99,14 @@ def count_songs():
                 .group_by(models.Artist.name)
         )
         if len(songs.all()) == 0:
-            abort(404)
+            abort(400)
 
         for u in songs.all():
             result_dict[u[0]] = u[1]
 
         return jsonify(result_dict)
     except:
-        abort(404)
+        abort(400)
 
 
 @app.route("/longest_tracks")
@@ -130,9 +130,7 @@ def longest_tracks_by_artist():
     if 'artist' in a:
         art = a['artist']
     else:
-        abort(404)
-        # raise InvalidUsage('missing artist')
-        # return 404
+        abort(400)
 
     try:
         tracks = db_session.query(models.Track).join(models.Track.album).join(models.Album.artist).filter(
@@ -147,10 +145,10 @@ def longest_tracks_by_artist():
                 i[di] = str(i[di])
 
         if len(result_dict) == 0:
-            abort(404)
+            abort(400)
 
     except:
-        abort(404)
+        abort(400)
 
     return jsonify(result_dict)
 
