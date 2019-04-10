@@ -79,7 +79,6 @@ def shutdown_session(exception=None):
 @app.route("/longest_tracks")
 def longest_tracks():
     tracks = db_session.query(models.Track).order_by(models.Track.milliseconds.desc()).limit(10)
-    print(tracks)
     result_dict = []
     for u in tracks.all():
         result_dict.append(u.__dict__)
@@ -175,6 +174,8 @@ def longest_tracks_by_artist():
 @app.route("/artists", methods=["POST"])
 def artists():
     data = request.json
+    if data is None:
+        abort(400)
     artist_name = data.get("name")
     if artist_name is None:
         abort(400)
@@ -186,7 +187,6 @@ def artists():
 
         artist = db_session.query(models.Artist).filter(models.Artist.name == artist_name).with_for_update().one()
         result_dict = artist.__dict__
-        print(result_dict)
 
         del result_dict['_sa_instance_state']
         dic = list(result_dict.keys())
