@@ -95,14 +95,14 @@ def longest_tracks_by_artist():
 def artists():
     if request.method == "POST":
         return post_artists()
-    abort(404)
+    abort(400)
 
 
 def post_artists():
     data = request.json
     new_name = data.get("name")
     if new_name is None:
-        abort(404)
+        abort(400)
 
     try:
         art = models.Artist(name=new_name)
@@ -120,7 +120,7 @@ def post_artists():
 
         return jsonify(result_dict)
     except:
-        abort(404)
+        abort(400)
 
 
 @app.route("/count_songs")
