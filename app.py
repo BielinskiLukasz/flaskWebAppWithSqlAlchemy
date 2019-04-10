@@ -8,6 +8,7 @@ import models
 from models import Base
 
 DATABASE_URL = os.environ['DATABASE_URL']
+
 engine = create_engine(DATABASE_URL)
 
 db_session = scoped_session(
@@ -191,7 +192,7 @@ def artists():
         for di in dic:
             result_dict[di] = str(result_dict[di])
 
-        return jsonify(result_dict)
+        return jsonify(result_dict[0])
     except:
         abort(400)
 
