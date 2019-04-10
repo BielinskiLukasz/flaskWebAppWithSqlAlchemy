@@ -192,7 +192,7 @@ def artists():
         for di in dic:
             result_dict[di] = str(result_dict[di])
 
-        return jsonify(result_dict[0])
+        return jsonify(result_dict)
     except:
         abort(400)
 
