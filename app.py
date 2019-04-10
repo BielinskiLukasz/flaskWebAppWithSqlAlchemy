@@ -3,7 +3,6 @@ import os
 from flask import Flask, abort, request, jsonify
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import scoped_session, sessionmaker
-from schema import Schema, And, Use, Optional
 
 import models
 from models import Base
@@ -179,16 +178,6 @@ def artists():
     new_name = data.get("name")
     if new_name is None:
         abort(400)
-
-    # not_valid = True
-    # try:
-    #     new_artist = request.get_json()
-    #     schema = Schema({'name': And(str, len)})
-    #     not_valid = schema.is_valid(new_artist)
-    # except:
-    #     abort(400)
-    # if not not_valid:
-    #     return 400
 
     try:
         art = models.Artist(name=new_name)
