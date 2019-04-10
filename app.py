@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, abort, render_template, request, jsonify
+from flask import Flask, abort, request, jsonify
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -9,7 +9,6 @@ from models import Base
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
-# engine = create_engine("postgresql://postgres:postgres@localhost:5432/chinook")
 engine = create_engine(DATABASE_URL)
 
 db_session = scoped_session(
@@ -22,7 +21,7 @@ app = Flask(__name__)
 
 
 class InvalidUsage(Exception):
-    status_code = 404
+    status_code = 400
 
     def __init__(self, error, status_code=None, payload=None):
         super().__init__(self)
@@ -45,7 +44,7 @@ def handle_invalid_usage(error):
 
 
 @app.teardown_appcontext
-def shutdown_session(exception=None):
+def shutdown_session():
     db_session.remove()
 
 
@@ -84,12 +83,12 @@ def post_artists():
 @app.route("/count_songs")
 def count_songs():
     a = request.args
-    if ('artist' in a):
+    if 'artist' in a:
         art = str(a['artist'])
         art = art.split(",")
 
     else:
-        abort(404)
+        abort(400)
     try:
         result_dict = {}
         songs = (
@@ -100,14 +99,14 @@ def count_songs():
                 .group_by(models.Artist.name)
         )
         if len(songs.all()) == 0:
-            abort(404)
+            abort(400)
 
         for u in songs.all():
             result_dict[u[0]] = u[1]
 
         return jsonify(result_dict)
     except:
-        abort(404)
+        abort(400)
 
 
 @app.route("/longest_tracks")
@@ -128,12 +127,10 @@ def longest_tracks():
 @app.route("/longest_tracks_by_artist")
 def longest_tracks_by_artist():
     a = request.args
-    if ('artist' in a):
+    if 'artist' in a:
         art = a['artist']
     else:
-        abort(404)
-        # raise InvalidUsage('missing artist')
-        # return 404
+        abort(400)
 
     try:
         tracks = db_session.query(models.Track).join(models.Track.album).join(models.Album.artist).filter(
@@ -148,10 +145,10 @@ def longest_tracks_by_artist():
                 i[di] = str(i[di])
 
         if len(result_dict) == 0:
-            abort(404)
+            abort(400)
 
     except:
-        abort(404)
+        abort(400)
 
     return jsonify(result_dict)
 
