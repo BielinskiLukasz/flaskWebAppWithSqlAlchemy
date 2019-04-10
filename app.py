@@ -174,12 +174,6 @@ def longest_tracks_by_artist():
 # linki - http://docs.python-cerberus.org/en/stable/ i https://github.com/keleshev/schema
 @app.route("/artists", methods=["POST"])
 def artists():
-    if request.method == "POST":
-        return post_artists()
-    abort(400)
-
-
-def post_artists():
     data = request.json
     new_name = data.get("name")
     if new_name is None:
